@@ -3,8 +3,6 @@ services:
     build: ./api
     ports:
       - "5000:5000"
-    depends_on:
-      - mosquitto
 
   mosquitto:
     image: eclipse-mosquitto:2
@@ -12,7 +10,6 @@ services:
       - "1883:1883"
     volumes:
       - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
-      - mosquitto-data:/mosquitto/data
 
   mqtt-client:
     build: ./mqtt-client
@@ -20,11 +17,8 @@ services:
       - mosquitto
 
   frontend:
-  build: ./frontend
-  ports:
-    - "5173:5173"
-  depends_on:
-    - api
-
-volumes:
-  mosquitto-data:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api
