@@ -11,11 +11,10 @@ services:
     volumes:
       - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
 
-mqtt-client:
-  build:
-    context: ./mqtt-client
-  depends_on:
-    - mosquitto
+  mqtt-client:
+    build: ./mqtt-client
+    depends_on:
+      - mosquitto
 
   frontend:
     build: ./frontend
