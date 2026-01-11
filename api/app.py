@@ -1,42 +1,30 @@
-import logging
-import os
-from flask import Flask, jsonify
+from fastapi import FastAPI
 import psutil
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(levelname)s:%(name)s:%(message)s"
-)
-logger = logging.getLogger("system-api")
+app = FastAPI()
 
-app = Flask(__name__)
+users = ["alice", "bob"]
 
-@app.route("/users", methods=["GET"])
-def users():
-    try:
-        with open("/etc/passwd") as f:
-            count = sum(1 for _ in f)
-        logger.info("Users endpoint -> %s users", count)
-        return jsonify({"total_users": count}), 200
-    except Exception as exc:
-        logger.exception("Failed to read /etc/passwd")
-        return jsonify({"error": "unable to compute user count"}), 500
+@app.get("/users")
+def get_users():
+    return users
 
-@app.route("/storage", methods=["GET"])
-def storage():
-    try:
-        du = psutil.disk_usage("/")
-        percent = du.percent
-        logger.info("Storage endpoint -> %.1f%% used", percent)
-        return jsonify({"disk_usage_percent": percent}), 200
-    except Exception as exc:
-        logger.exception("psutil disk_usage failed")
-        return jsonify({"error": "unable to obtain disk usage"}), 503
+@app.post("/users/{name}")
+def add_user(name: str):
+    if name not in users:
+        users.append(name)
+    return users
 
-@app.errorhandler(404)
-def not_found(e):
-    return jsonify({"error": "endpoint not found"}), 404
+@app.delete("/users/{name}")
+def delete_user(name: str):
+    if name in users:
+        users.remove(name)
+    return users
 
-if __name__ == "__main__":
-    # gunicorn will override this when used in prod
-    app.run(host="0.0.0.0", port=5000, debug=False)
+@app.get("/metrics")
+def metrics():
+    return {
+        "cpu_percent": psutil.cpu_percent(),
+        "memory_percent": psutil.virtual_memory().percent,
+        "disk_percent": psutil.disk_usage("/").percent,
+    }
