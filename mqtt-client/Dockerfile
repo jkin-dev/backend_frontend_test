@@ -1,6 +1,11 @@
 FROM rust:1.75 AS builder
+
 WORKDIR /app
-COPY . .
+
+# Copy only Rust files
+COPY Cargo.toml .
+COPY src ./src
+
 RUN cargo build --release
 
 FROM debian:bookworm-slim
