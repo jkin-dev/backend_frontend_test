@@ -21,6 +21,12 @@ fn main() {
         value: 1,
     };
 
+    loop {
+    client.publish("test/metrics", ..., serde_json::to_string(&payload)?)?;
+    info!("Published: {:?}", payload);
+    tokio::time::sleep(Duration::from_secs(5)).await;
+}
+
     let json = serde_json::to_string(&payload).unwrap();
     client.publish("test/topic", QoS::AtLeastOnce, false, json).unwrap();
 
