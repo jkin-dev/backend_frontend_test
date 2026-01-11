@@ -1,0 +1,15 @@
+# ---- Python service ----
+api/__pycache__
+api/*.pyc
+api/*.pyo
+api/.pytest_cache
+api/.venv
+
+# ---- Rust service ----
+mqtt-client/target
+mqtt-client/Cargo.lock
+
+# ---- Git / docs ----
+.git
+*.md
+diagram.png
