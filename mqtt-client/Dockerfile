@@ -1,8 +1,8 @@
-FROM rust:1.78-slim
-# cache-buster 2024-06-09-19:47
+FROM rust:1.75 AS builder
 WORKDIR /app
-COPY Cargo.toml .
-RUN date +%s > /tmp/bust
-COPY src ./src
+COPY . .
 RUN cargo build --release
-CMD ["./target/release/mqtt-client"]
+
+FROM debian:bookworm-slim
+COPY --from=builder /app/target/release/mqtt-client /usr/local/bin/mqtt-client
+CMD ["mqtt-client"]
