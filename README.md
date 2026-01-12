@@ -3,12 +3,24 @@
 Full-stack demo that exposes Linux user & system metrics through a React UI and an MQTT data-stream.
 
 ## Quick start (one command)
+
+### Option A – GitHub Codespaces (no local install)
+1. Press the green **▶ Code** button → **Codespaces** → **Create codespace on main**
+2. In the terminal that appears, run:
+   ```bash
+   make demo        # builds & starts everything
+   ```
+Click the PORTS tab (bottom panel) and open:
+5173 → React dashboard
+5000 → FastAPI docs (/docs)
+When finished, run make stop or simply delete the Codespace.
+### Option B – Local Docker
 ```bash
 git clone https://github.com/jkin-dev/backend_frontend_test.git
 cd backend_frontend_test
 make demo        # builds & starts everything
 # open http://localhost:5173
-```
+   ```
 
 ## What you will see
 * List of local Linux users with add / delete buttons
@@ -30,8 +42,10 @@ make demo        # builds & starts everything
 ![Alt text](diagram.png)
 
 ## Security choices
-API & front run as non-root user inside containers
-Read-only mount for /etc/passwd (user list)
-MQTT open by design (local demo) – would add TLS + auth in prod
+* API & front run as non-root user inside containers
+* Read-only mount for /etc/passwd (user list)
+* MQTT open by design (local demo) – would add TLS + auth in prod
 ## Clean-up
+```bash
 make stop
+   ```
