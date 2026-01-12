@@ -1,4 +1,6 @@
-from fastapi import FastAPI, RedirectResponse
+from fastapi import FastAPI
+from fastapi.responses import RedirectResponse   # add this line
+from fastapi.middleware.cors import CORSMiddleware
 import psutil
 
 app = FastAPI()
